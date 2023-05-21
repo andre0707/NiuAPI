@@ -201,17 +201,15 @@ public extension NiuAPI {
     
     // MARK: - Login
     
+#if canImport(CryptoKit)
+    
     /// Will log in and return an access token
     /// - Parameters:
     ///   - account: Can be a email address or phone number or user name. Whatever is registered
     ///   - password: The password connected to the `account`. This must be the plain password. It will then be md5 hashed inside this function
     ///   - countryCode: The country code as in phone numbers. Without leadings zeros. Use 49 for Germany.
+    /// - Returns: The log in response information
     static func login(with account: String, password: String, countryCode: Int) async throws -> LoginResponse {
-        var components = URLComponents(string: accountBaseURL)!
-        components.path = "/v3/api/oauth2/token"
-        
-        guard let url = components.url else { throw Errors.badURL }
-        
         let body: [String : Any] = [
             "app_id" : "niu_fksss2ws",
             "grant_type" : "password",
@@ -220,6 +218,39 @@ public extension NiuAPI {
             "password" : password.md5,
             "countryCode" : countryCode
         ]
+        
+        return try await _login(with: body)
+    }
+    
+#endif
+    
+    /// Will log in and return an access token
+    /// - Parameters:
+    ///   - account: Can be a email address or phone number or user name. Whatever is registered
+    ///   - md5HashedPassword: The md5 hash value of the password connected to the `account`.
+    ///   - countryCode: The country code as in phone numbers. Without leadings zeros. Use 49 for Germany.
+    /// - Returns: The log in response information
+    static func login(with account: String, md5HashedPassword: String, countryCode: Int) async throws -> LoginResponse {
+        let body: [String : Any] = [
+            "app_id" : "niu_fksss2ws",
+            "grant_type" : "password",
+            "scope" : "base",
+            "account" : account,
+            "password" : md5HashedPassword,
+            "countryCode" : countryCode
+        ]
+        
+        return try await _login(with: body)
+    }
+    
+    /// Will log in and return an access token
+    /// - Parameter body: The body which is needed to log in. It should provide information about: `app_id`, `grant_type`, `scope`, `account`, `password` and `countryCode`
+    /// - Returns: The log in response information
+    private static func _login(with body: [String : Any]) async throws -> LoginResponse {
+        var components = URLComponents(string: accountBaseURL)!
+        components.path = "/v3/api/oauth2/token"
+        
+        guard let url = components.url else { throw Errors.badURL }
         
         let request = try urlRequest(url: url, userAgent: userAgent, httpMethode: .post, body: body)
         

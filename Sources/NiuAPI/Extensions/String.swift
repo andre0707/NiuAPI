@@ -5,6 +5,7 @@
 //  Created by Andre Albach on 07.05.23.
 //
 
+#if canImport(CryptoKit)
 import CryptoKit
 
 internal extension String {
@@ -14,3 +15,5 @@ internal extension String {
         return computed.map { String(format: "%02hhx", $0) }.joined()
     }
 }
+
+#endif
