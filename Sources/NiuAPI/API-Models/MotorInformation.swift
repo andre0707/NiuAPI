@@ -5,7 +5,7 @@
 //  Created by Andre Albach on 21.05.23.
 //
 
-import CoreLocation
+import Foundation
 
 /// A motor information object
 public struct MotorInformation: Codable {
@@ -64,9 +64,6 @@ extension MotorInformation {
         public let lng: Double
         /// Latitude
         public let lat: Double
-        
-        /// The location object
-        public var location: CLLocationCoordinate2D { CLLocationCoordinate2D(latitude: lat, longitude: lng) }
     }
 }
 

@@ -5,7 +5,7 @@
 //  Created by Andre Albach on 07.05.23.
 //
 
-import CoreLocation
+import Foundation
 
 /// Detail information of a track. This includes the list of coordinates for the route.
 public struct TrackDetail: Codable {
@@ -38,9 +38,6 @@ extension TrackDetail {
         public let accelerY: Int
         /// Acceleration in X
         public let accelerX: Int
-        
-        /// The location object
-        public var location: CLLocationCoordinate2D { CLLocationCoordinate2D(latitude: lat, longitude: lng) }
     }
 }
 
@@ -51,8 +48,5 @@ extension TrackDetail {
         public let lng: Double
         /// Latitude
         public let lat: Double
-        
-        /// The location object
-        public var location: CLLocationCoordinate2D { CLLocationCoordinate2D(latitude: lat, longitude: lng) }
     }
 }

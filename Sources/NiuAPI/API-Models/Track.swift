@@ -5,7 +5,7 @@
 //  Created by Andre Albach on 07.05.23.
 //
 
-import CoreLocation
+import Foundation
 
 /// A single track which was driven.
 public struct Track: Codable {
@@ -40,13 +40,5 @@ extension Track {
         public let lng: String
         /// Latitude
         public let lat: String
-        
-        /// The location object
-        public var location: CLLocationCoordinate2D? {
-            guard let _lat = Double(lat),
-                  let _lon = Double(lng) else { return nil }
-            
-            return CLLocationCoordinate2D(latitude: _lat, longitude: _lon)
-        }
     }
 }

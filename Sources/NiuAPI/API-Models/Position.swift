@@ -5,7 +5,7 @@
 //  Created by Andre Albach on 07.05.23.
 //
 
-import CoreLocation
+import Foundation
 
 /// The position data of a vehicle
 public struct Position: Codable {
@@ -21,7 +21,4 @@ public struct Position: Codable {
     public let gps: Int
     /// PGS precision
     public let gpsPrecision: Int
-    
-    /// The location object
-    var location: CLLocationCoordinate2D { CLLocationCoordinate2D(latitude: lat, longitude: lng)}
 }
