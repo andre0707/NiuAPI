@@ -22,3 +22,11 @@ public struct Position: Codable {
     /// PGS precision
     public let gpsPrecision: Int
 }
+
+
+// MARK: - Computed properties for easier handling
+
+extension Position {
+    /// The `Date` object version of `self.time`.
+    public var date: Date { Date(timeIntervalSince1970: TimeInterval(timestamp / 1000)) }
+}

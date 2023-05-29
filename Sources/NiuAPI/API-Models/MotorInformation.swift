@@ -23,7 +23,7 @@ public struct MotorInformation: Codable {
     public let postion: CoordinatePoint
     /// Horizontal dilution of precision [0; 50]. A good HDOP is up to 2.5. For navigation a value up to 8 is acceptable.
     public let hdop: Int
-    /// The timestamp (unix time)
+    /// The timestamp (unix time) (13 digits)
     public let time: Int
     /// Information about the batteries
     public let batteries: Battery
@@ -100,5 +100,23 @@ extension MotorInformation {
         public let distance: Int
         /// Timestamp when the ride was
         public let time: Int
+    }
+}
+
+
+// MARK: - Computed properties for easier handling
+
+extension MotorInformation {
+    /// The `Date` object version of `self.time`.
+    /// Holds information of when the motor information were last read from the vehicle
+    public var date: Date { Date(timeIntervalSince1970: TimeInterval(time / 1000)) }
+    
+    /// The time (in minutes) which is left to fully charge the batteries
+    public var leftChargingTime: TimeInterval? {
+        // Will be in decimal hours
+        guard let _leftTime = Double(leftTime) else { return nil }
+        
+        // Return value in minutes
+        return TimeInterval(_leftTime * 60)
     }
 }

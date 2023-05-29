@@ -56,3 +56,11 @@ extension BatteryHealth.Batteries.Compartment {
         public let name: String
     }
 }
+
+
+// MARK: - Computed properties for easier handling
+
+extension BatteryHealth.Batteries.Compartment.HealthRecord {
+    /// The `Date` object version of `self.time`.
+    public var date: Date { Date(timeIntervalSince1970: TimeInterval(time / 1000)) }
+}
