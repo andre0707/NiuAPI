@@ -42,7 +42,7 @@ let scooterSerialNumber = myScooter.sn
 This is how you can get the status of your vehicle:
 ```Swift
 let motorInfo = try await NiuAPI.motorInfo(forVehicleWith: scooterSerialNumber, accessToken: accessToken)
-let isCharging = motorInfo.isCharging == 1
+let isCharging = motorInfo.isCharging
 let estimatedMileage = motorInfo.estimatedMileage // This is in km
 let chargingLevelBatteryA = motorInfo.batteries.compartmentA.batteryCharging // In percentage
 let chargingLevelBatteryB = motorInfo.batteries.compartmentB.batteryCharging // In percentage
