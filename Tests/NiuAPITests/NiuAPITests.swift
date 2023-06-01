@@ -81,7 +81,7 @@ final class NiuAPITests: XCTestCase {
     func test_readBatteryInformation() async throws {
         let batteryInformation = try await NiuAPI.batteryInformation(forVehicleWith: scooterSerialNumber, accessToken: accessToken)
 
-        XCTAssertEqual(batteryInformation.isCharging, 0)
+        XCTAssertEqual(batteryInformation.isCharging, false)
     }
     
     func test_readBatteryHealth() async throws {
@@ -99,7 +99,7 @@ final class NiuAPITests: XCTestCase {
     func test_readMotorInfo() async throws {
         let motorInfo = try await NiuAPI.motorInfo(forVehicleWith: scooterSerialNumber, accessToken: accessToken)
 
-        XCTAssertEqual(motorInfo.ss_protocol_ver, 3)
-        XCTAssertEqual(motorInfo.ss_online_sta, "1")
+        XCTAssertEqual(motorInfo.ss_protocolVersion, 3)
+        XCTAssertEqual(motorInfo.ss_onlineStatus, "1")
     }
 }

@@ -12,7 +12,7 @@ public struct BatteryInfo: Codable {
     /// The batteries
     public let batteries: Batteries
     /// Is charging
-    public let isCharging: Int
+    public let isCharging: Bool
     /// Centre control battery
     public let centreCtrlBattery: String
     /// Battery detail
@@ -20,6 +20,23 @@ public struct BatteryInfo: Codable {
     /// Estimated mileage in km
     public let estimatedMileage: Int
 }
+
+
+extension BatteryInfo {
+    public init(from decoder: Decoder) throws {
+        let container: KeyedDecodingContainer<BatteryInfo.CodingKeys> = try decoder.container(keyedBy: BatteryInfo.CodingKeys.self)
+        
+        self.batteries = try container.decode(BatteryInfo.Batteries.self, forKey: BatteryInfo.CodingKeys.batteries)
+        
+        let _isCharging =  try container.decode(Int.self, forKey: BatteryInfo.CodingKeys.isCharging)
+        self.isCharging = _isCharging == 1
+        
+        self.centreCtrlBattery = try container.decode(String.self, forKey: BatteryInfo.CodingKeys.centreCtrlBattery)
+        self.batteryDetail = try container.decode(Bool.self, forKey: BatteryInfo.CodingKeys.batteryDetail)
+        self.estimatedMileage = try container.decode(Int.self, forKey: BatteryInfo.CodingKeys.estimatedMileage)
+    }
+}
+
 
 extension BatteryInfo {
     /// A structure for the batteries
@@ -30,6 +47,7 @@ extension BatteryInfo {
         public let compartmentB: Compartment
     }
 }
+
 
 extension BatteryInfo.Batteries {
     /// A single battery
@@ -54,6 +72,7 @@ extension BatteryInfo.Batteries {
         public let gradeBattery: String
     }
 }
+
 
 extension BatteryInfo.Batteries.Compartment {
     public struct Item: Codable {

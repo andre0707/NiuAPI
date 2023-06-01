@@ -10,32 +10,27 @@ import CoreLocation
 
 extension MotorInformation.CoordinatePoint {
     /// The location object
-    public var location: CLLocationCoordinate2D { CLLocationCoordinate2D(latitude: lat, longitude: lng) }
+    public var location: CLLocationCoordinate2D { CLLocationCoordinate2D(latitude: latitude, longitude: longitude) }
 }
 
 extension Position {
     /// The location object
-    public var location: CLLocationCoordinate2D { CLLocationCoordinate2D(latitude: lat, longitude: lng)}
+    public var location: CLLocationCoordinate2D { CLLocationCoordinate2D(latitude: latitude, longitude: longitude)}
 }
 
 extension Track.CoordinatePoint {
     /// The location object
-    public var location: CLLocationCoordinate2D? {
-        guard let _lat = Double(lat),
-              let _lon = Double(lng) else { return nil }
-        
-        return CLLocationCoordinate2D(latitude: _lat, longitude: _lon)
-    }
+    public var location: CLLocationCoordinate2D? { CLLocationCoordinate2D(latitude: latitude, longitude: longitude) }
 }
 
 extension TrackDetail.TrackPoint {
     /// The location object
-    public var location: CLLocationCoordinate2D { CLLocationCoordinate2D(latitude: lat, longitude: lng) }
+    public var location: CLLocationCoordinate2D { CLLocationCoordinate2D(latitude: latitude, longitude: longitude) }
 }
 
 extension TrackDetail.CoordinatePoint {
     /// The location object
-    public var location: CLLocationCoordinate2D { CLLocationCoordinate2D(latitude: lat, longitude: lng) }
+    public var location: CLLocationCoordinate2D { CLLocationCoordinate2D(latitude: latitude, longitude: longitude) }
 }
 
 #endif

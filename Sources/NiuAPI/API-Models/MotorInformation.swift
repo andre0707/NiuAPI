@@ -10,7 +10,7 @@ import Foundation
 /// A motor information object
 public struct MotorInformation: Codable {
     /// Status, if the vehicle is currently charging
-    public let isCharging: Int
+    public let isCharging: Bool
     /// Status, if the vehicle is locked
     public let lockStatus: Int
     /// Status, if the adaptive cruise control is on or not
@@ -22,19 +22,19 @@ public struct MotorInformation: Codable {
     /// The current position of the vehicle
     public let postion: CoordinatePoint
     /// Horizontal dilution of precision [0; 50]. A good HDOP is up to 2.5. For navigation a value up to 8 is acceptable.
-    public let hdop: Int
-    /// The timestamp (unix time) (13 digits)
-    public let time: Int
+    public let horizontalDilutionOfPrecision: Int
+    /// The date
+    public let date: Date
     /// Information about the batteries
     public let batteries: Battery
-    /// The time left to fully charge the battery. Example "1.8" would be 1h48min.
-    public let leftTime: String
+    /// The time left to fully charge the battery (in minutes)
+    public let leftTime: TimeInterval
     /// The estimated milage in km which the vehicle can drive with the current charging state
     public let estimatedMileage: Int
-    /// The timestamp (unix time) when the position was recorded
-    public let gpsTimestamp: Int
-    /// The timestamp (unix time) when the info were recorded
-    public let infoTimestamp: Int
+    /// The time when the position was recorded
+    public let gpsTimestamp: Date
+    /// The time when the info were recorded
+    public let infoTimestamp: Date
     /// The speed in km/h the vehicle is currently driving
     public let nowSpeed: Int
     /// Shaking value
@@ -46,26 +46,104 @@ public struct MotorInformation: Codable {
     /// Centre control battery
     public let centreCtrlBattery: Int
     /// The SS protocol version
-    public let ss_protocol_ver: Int
+    public let ss_protocolVersion: Int
     /// The SS online status
-    public let ss_online_sta: String
+    public let ss_onlineStatus: String
     /// The GPS signal strength
     public let gps: Int
     /// THe GSM signal strength
     public let gsm: Int
     /// Information about the last track
     public let lastTrack: TrackInformation
+    
+    /// The coding keys
+    enum CodingKeys: String, CodingKey {
+        case isCharging
+        case lockStatus
+        case isAccOn
+        case isFortificationOn
+        case isConnected
+        case postion
+        case horizontalDilutionOfPrecision = "hdop"
+        case date = "time"
+        case batteries
+        case leftTime
+        case estimatedMileage
+        case gpsTimestamp
+        case infoTimestamp
+        case nowSpeed
+        case shakingValue
+        case locationType
+        case batteryDetail
+        case centreCtrlBattery
+        case ss_protocolVersion = "ss_protocol_ver"
+        case ss_onlineStatus = "ss_online_sta"
+        case gps
+        case gsm
+        case lastTrack
+    }
 }
+
+
+extension MotorInformation {
+    public init(from decoder: Decoder) throws {
+        let container: KeyedDecodingContainer<MotorInformation.CodingKeys> = try decoder.container(keyedBy: MotorInformation.CodingKeys.self)
+
+        let _isCharging = try container.decode(Int.self, forKey: MotorInformation.CodingKeys.isCharging)
+        self.isCharging = _isCharging == 1
+        
+        self.lockStatus = try container.decode(Int.self, forKey: MotorInformation.CodingKeys.lockStatus)
+        self.isAccOn = try container.decode(Int.self, forKey: MotorInformation.CodingKeys.isAccOn)
+        self.isFortificationOn = try container.decode(String.self, forKey: MotorInformation.CodingKeys.isFortificationOn)
+        self.isConnected = try container.decode(Bool.self, forKey: MotorInformation.CodingKeys.isConnected)
+        self.postion = try container.decode(MotorInformation.CoordinatePoint.self, forKey: MotorInformation.CodingKeys.postion)
+        self.horizontalDilutionOfPrecision = try container.decode(Int.self, forKey: MotorInformation.CodingKeys.horizontalDilutionOfPrecision)
+        
+        let _date = try container.decode(Int.self, forKey: MotorInformation.CodingKeys.date)
+        self.date = Date(timeIntervalSince1970: TimeInterval(_date) / 1000)
+        
+        self.batteries = try container.decode(MotorInformation.Battery.self, forKey: MotorInformation.CodingKeys.batteries)
+        
+        let _leftTime = try container.decode(Int.self, forKey: MotorInformation.CodingKeys.leftTime)
+        self.leftTime = TimeInterval(_leftTime) * 60
+        
+        self.estimatedMileage = try container.decode(Int.self, forKey: MotorInformation.CodingKeys.estimatedMileage)
+        
+        let _gpsTimestamp = try container.decode(Int.self, forKey: MotorInformation.CodingKeys.gpsTimestamp)
+        self.gpsTimestamp = Date(timeIntervalSince1970: TimeInterval(_gpsTimestamp) / 1000)
+        let _infoTimestamp = try container.decode(Int.self, forKey: MotorInformation.CodingKeys.infoTimestamp)
+        self.infoTimestamp = Date(timeIntervalSince1970: TimeInterval(_infoTimestamp) / 1000)
+        
+        self.nowSpeed = try container.decode(Int.self, forKey: MotorInformation.CodingKeys.nowSpeed)
+        self.shakingValue = try container.decode(String.self, forKey: MotorInformation.CodingKeys.shakingValue)
+        self.locationType = try container.decode(Int.self, forKey: MotorInformation.CodingKeys.locationType)
+        self.batteryDetail = try container.decode(Bool.self, forKey: MotorInformation.CodingKeys.batteryDetail)
+        self.centreCtrlBattery = try container.decode(Int.self, forKey: MotorInformation.CodingKeys.centreCtrlBattery)
+        self.ss_protocolVersion = try container.decode(Int.self, forKey: MotorInformation.CodingKeys.ss_protocolVersion)
+        self.ss_onlineStatus = try container.decode(String.self, forKey: MotorInformation.CodingKeys.ss_onlineStatus)
+        self.gps = try container.decode(Int.self, forKey: MotorInformation.CodingKeys.gps)
+        self.gsm = try container.decode(Int.self, forKey: MotorInformation.CodingKeys.gsm)
+        self.lastTrack = try container.decode(MotorInformation.TrackInformation.self, forKey: MotorInformation.CodingKeys.lastTrack)
+    }
+}
+
 
 extension MotorInformation {
     /// A single coordinate point
     public struct CoordinatePoint: Codable {
         /// Longitude
-        public let lng: Double
+        public let longitude: Double
         /// Latitude
-        public let lat: Double
+        public let latitude: Double
+        
+        /// The coding keys
+        enum CodingKeys: String, CodingKey {
+            case longitude = "lng"
+            case latitude = "lat"
+        }
     }
 }
+
 
 extension MotorInformation {
     /// Battery information
@@ -76,6 +154,7 @@ extension MotorInformation {
         public let compartmentB: BatteryCompartment
     }
 }
+
 
 extension MotorInformation.Battery {
     /// Battery compartment information
@@ -91,6 +170,7 @@ extension MotorInformation.Battery {
     }
 }
 
+
 extension MotorInformation {
     /// Basic track information
     public struct TrackInformation: Codable {
@@ -100,23 +180,5 @@ extension MotorInformation {
         public let distance: Int
         /// Timestamp when the ride was
         public let time: Int
-    }
-}
-
-
-// MARK: - Computed properties for easier handling
-
-extension MotorInformation {
-    /// The `Date` object version of `self.time`.
-    /// Holds information of when the motor information were last read from the vehicle
-    public var date: Date { Date(timeIntervalSince1970: TimeInterval(time / 1000)) }
-    
-    /// The time (in minutes) which is left to fully charge the batteries
-    public var leftChargingTime: TimeInterval? {
-        // Will be in decimal hours
-        guard let _leftTime = Double(leftTime) else { return nil }
-        
-        // Return value in minutes
-        return TimeInterval(_leftTime * 60)
     }
 }

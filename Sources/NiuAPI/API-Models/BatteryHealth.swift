@@ -15,6 +15,7 @@ public struct BatteryHealth: Codable {
     public let isDoubleBattery: Bool
 }
 
+
 extension BatteryHealth {
     /// A structure for all the batteries
     public struct Batteries: Codable {
@@ -24,6 +25,7 @@ extension BatteryHealth {
         public let compartmentB: Compartment
     }
 }
+
 
 extension BatteryHealth.Batteries {
     /// A description of a single battery.
@@ -41,6 +43,7 @@ extension BatteryHealth.Batteries {
     }
 }
 
+
 extension BatteryHealth.Batteries.Compartment {
     /// The structure of a battery health record
     public struct HealthRecord: Codable {
@@ -50,17 +53,34 @@ extension BatteryHealth.Batteries.Compartment {
         public let chargeCount: String
         /// HTML color in #RGB format
         public let color: String
-        /// Timestamp in unix timestamp format
-        public let time: Int
+        /// Date
+        public let date: Date
         /// Name
         public let name: String
+        
+        /// The coding keys
+        enum CodingKeys: String, CodingKey {
+            case result
+            case chargeCount
+            case color
+            case date = "time"
+            case name
+        }
     }
 }
 
 
-// MARK: - Computed properties for easier handling
-
 extension BatteryHealth.Batteries.Compartment.HealthRecord {
-    /// The `Date` object version of `self.time`.
-    public var date: Date { Date(timeIntervalSince1970: TimeInterval(time / 1000)) }
+    public init(from decoder: Decoder) throws {
+        let container: KeyedDecodingContainer<BatteryHealth.Batteries.Compartment.HealthRecord.CodingKeys> = try decoder.container(keyedBy: BatteryHealth.Batteries.Compartment.HealthRecord.CodingKeys.self)
+        
+        self.result = try container.decode(String.self, forKey: BatteryHealth.Batteries.Compartment.HealthRecord.CodingKeys.result)
+        self.chargeCount = try container.decode(String.self, forKey: BatteryHealth.Batteries.Compartment.HealthRecord.CodingKeys.chargeCount)
+        self.color = try container.decode(String.self, forKey: BatteryHealth.Batteries.Compartment.HealthRecord.CodingKeys.color)
+        
+        let _date = try container.decode(Int.self, forKey: BatteryHealth.Batteries.Compartment.HealthRecord.CodingKeys.date)
+        self.date = Date(timeIntervalSince1970: TimeInterval(_date) / 1000)
+        
+        self.name = try container.decode(String.self, forKey: BatteryHealth.Batteries.Compartment.HealthRecord.CodingKeys.name)
+    }
 }
