@@ -104,8 +104,15 @@ extension MotorInformation {
         
         self.batteries = try container.decode(MotorInformation.Battery.self, forKey: MotorInformation.CodingKeys.batteries)
         
-        let _leftTime = try container.decode(Int.self, forKey: MotorInformation.CodingKeys.leftTime)
-        self.leftTime = TimeInterval(_leftTime) * 60
+        let _leftTime: TimeInterval
+        if let stringLeftTime = try? container.decodeIfPresent(String.self, forKey: MotorInformation.CodingKeys.leftTime) {
+            _leftTime = TimeInterval(stringLeftTime) ?? 0
+        } else if let intLeftTime = try? container.decodeIfPresent(Int.self, forKey: MotorInformation.CodingKeys.leftTime) {
+            _leftTime = TimeInterval(intLeftTime)
+        } else {
+            _leftTime = try container.decode(TimeInterval.self, forKey: MotorInformation.CodingKeys.leftTime)
+        }
+        self.leftTime = _leftTime * 60
         
         self.estimatedMileage = try container.decode(Int.self, forKey: MotorInformation.CodingKeys.estimatedMileage)
         

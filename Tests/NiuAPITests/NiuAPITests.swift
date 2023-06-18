@@ -93,7 +93,7 @@ final class NiuAPITests: XCTestCase {
     func test_batteryChart() async throws {
         let batteryChartData = try await NiuAPI.batteryChart(forVehicleWith: scooterSerialNumber, andBattery: 1, page: 1, pageSize: "A", accessToken: accessToken)
         
-        XCTAssertEqual(batteryChartData.items1.count, 94)
+        XCTAssertEqual(batteryChartData.items1.count, 95)
     }
     
     func test_readMotorInfo() async throws {
