@@ -17,4 +17,7 @@ public struct Token: Codable {
     public let refresh_token_expires_in: Int
     /// Time interval when the access token will expire
     public let token_expires_in: Int
+    
+    /// The token expiration date
+    public var tokenExpirationDate: Date { Date(timeIntervalSince1970: TimeInterval(refresh_token_expires_in)) }
 }
