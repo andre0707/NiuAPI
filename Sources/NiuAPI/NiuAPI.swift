@@ -5,6 +5,9 @@
 //
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 /// User agent as in the official Niu app for iOS
 fileprivate let userAgent = "manager/4.10.4 (iPhone; iOS 16.4.1);brand=Unknown;model=Unknown;clientIdentifier=Overseas;lang=en-US"
@@ -254,7 +257,7 @@ public extension NiuAPI {
         
         let request = try urlRequest(url: url, userAgent: userAgent, httpMethode: .post, body: body)
         
-        let (data, urlResponse) = try await URLSession.shared.data(for: request, delegate: nil)
+        let (data, urlResponse) = try await URLSession.shared.asyncData(for: request, delegate: nil)
         
         guard let response = urlResponse as? HTTPURLResponse else { throw Errors.response }
         
@@ -309,7 +312,7 @@ public extension NiuAPI {
         
         let request = urlRequest(url: url, userAgent: userAgent, accessToken: accessToken, httpMethode: .post)
         
-        let (data, urlResponse) = try await URLSession.shared.data(for: request, delegate: nil)
+        let (data, urlResponse) = try await URLSession.shared.asyncData(for: request, delegate: nil)
         
         guard let response = urlResponse as? HTTPURLResponse else { throw Errors.response }
         
@@ -346,7 +349,7 @@ public extension NiuAPI {
         
         let request = try urlRequest(url: url, userAgent: userAgent, accessToken: accessToken, httpMethode: .post, body: body)
         
-        let (data, urlResponse) = try await URLSession.shared.data(for: request, delegate: nil)
+        let (data, urlResponse) = try await URLSession.shared.asyncData(for: request, delegate: nil)
         
         guard let response = urlResponse as? HTTPURLResponse else { throw Errors.response }
         
@@ -383,7 +386,7 @@ public extension NiuAPI {
         
         let request = try urlRequest(url: url, userAgent: userAgent, accessToken: accessToken, httpMethode: .post, body: body)
         
-        let (data, urlResponse) = try await URLSession.shared.data(for: request, delegate: nil)
+        let (data, urlResponse) = try await URLSession.shared.asyncData(for: request, delegate: nil)
         
         guard let response = urlResponse as? HTTPURLResponse else { throw Errors.response }
         
@@ -428,7 +431,7 @@ public extension NiuAPI {
         
         let request = try urlRequest(url: url, userAgent: userAgent, accessToken: accessToken, httpMethode: .post, body: body)
         
-        let (data, urlResponse) = try await URLSession.shared.data(for: request, delegate: nil)
+        let (data, urlResponse) = try await URLSession.shared.asyncData(for: request, delegate: nil)
         
         guard let response = urlResponse as? HTTPURLResponse else { throw Errors.response }
         
@@ -470,7 +473,7 @@ public extension NiuAPI {
         
         let request = try urlRequest(url: url, userAgent: userAgent, accessToken: accessToken, httpMethode: .post, body: body)
         
-        let (data, urlResponse) = try await URLSession.shared.data(for: request, delegate: nil)
+        let (data, urlResponse) = try await URLSession.shared.asyncData(for: request, delegate: nil)
         
         guard let response = urlResponse as? HTTPURLResponse else { throw Errors.response }
         
@@ -510,7 +513,7 @@ public extension NiuAPI {
         
         let request = urlRequest(url: url, userAgent: userAgent, accessToken: accessToken)
         
-        let (data, urlResponse) = try await URLSession.shared.data(for: request, delegate: nil)
+        let (data, urlResponse) = try await URLSession.shared.asyncData(for: request, delegate: nil)
         
         guard let response = urlResponse as? HTTPURLResponse else { throw Errors.response }
         
@@ -547,7 +550,7 @@ public extension NiuAPI {
         
         let request = urlRequest(url: url, userAgent: userAgent, accessToken: accessToken)
         
-        let (data, urlResponse) = try await URLSession.shared.data(for: request, delegate: nil)
+        let (data, urlResponse) = try await URLSession.shared.asyncData(for: request, delegate: nil)
         
         guard let response = urlResponse as? HTTPURLResponse else { throw Errors.response }
         
@@ -591,7 +594,7 @@ public extension NiuAPI {
         
         let request = urlRequest(url: url, userAgent: userAgent, accessToken: accessToken)
         
-        let (data, urlResponse) = try await URLSession.shared.data(for: request, delegate: nil)
+        let (data, urlResponse) = try await URLSession.shared.asyncData(for: request, delegate: nil)
         
         guard let response = urlResponse as? HTTPURLResponse else { throw Errors.response }
         
@@ -632,7 +635,7 @@ public extension NiuAPI {
         
         let request = urlRequest(url: url, userAgent: userAgent, accessToken: accessToken)
         
-        let (data, urlResponse) = try await URLSession.shared.data(for: request, delegate: nil)
+        let (data, urlResponse) = try await URLSession.shared.asyncData(for: request, delegate: nil)
         
         guard let response = urlResponse as? HTTPURLResponse else { throw Errors.response }
         
