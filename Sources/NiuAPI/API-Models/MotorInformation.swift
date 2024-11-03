@@ -130,7 +130,11 @@ extension MotorInformation {
         self.ss_onlineStatus = try container.decode(String.self, forKey: MotorInformation.CodingKeys.ss_onlineStatus)
         self.gps = try container.decode(Int.self, forKey: MotorInformation.CodingKeys.gps)
         self.gsm = try container.decode(Int.self, forKey: MotorInformation.CodingKeys.gsm)
-        self.lastTrack = try container.decode(MotorInformation.TrackInformation.self, forKey: MotorInformation.CodingKeys.lastTrack)
+        do {
+            self.lastTrack = try container.decode(MotorInformation.TrackInformation.self, forKey: MotorInformation.CodingKeys.lastTrack)
+        } catch {
+            self.lastTrack = .init(ridingTime: 0, distance: 0, time: 0)
+        }
     }
 }
 
